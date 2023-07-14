@@ -1,0 +1,103 @@
+body {
+    height: 100vh;
+    width: 100%;
+  }
+#root{
+    margin: 120px auto;
+    max-width: 400px;
+    width: 100%;
+    background: rgba(128, 128, 128, 0.397);
+    color: white;
+    border-radius: 10px;
+    padding: 25px;
+}
+form {
+    display: flex;
+    height: 45px;
+    width: 100%;
+    margin: 20px 0;
+  }
+
+form input {
+    width: 85%;
+    border: 1px solid #ccc;
+    font-size: 17px;
+    border-radius: 5px;
+    padding-left: 15px;
+}
+form input:focus {
+    background-color: #ccc;
+}
+
+form .btn {
+    width: 60px;
+    border: none;
+    color: black;
+    font-size: 22px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 2px;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+form .btn.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+form button.active:hover {
+    opacity: 0.8;
+}
+
+.todolist {
+    max-height: 300px;
+    overflow-y: scroll;
+}
+::-webkit-scrollbar {
+    width: 0; 
+    background: transparent; 
+  }
+
+.todolist li {
+    list-style: none;
+    height: 45px;
+    width: 310px;
+    left: -40px;
+    line-height: 45px;
+    position: relative;
+    background: rgb(63, 62, 62);
+    border-radius: 3px;
+    margin-bottom: 8px;
+    padding: 0 45px;
+    cursor: default;
+}
+
+.remove {
+    position: absolute;
+    right: 0px;
+    width: 45px;
+    height: 31px;
+    text-align: center;
+    border-radius: 0 3px 3px 0;
+    cursor: pointer;
+    transform: rotate(45deg);
+}
+
+.done {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+
+.todolist li .checkbox {
+    position: absolute;
+    left: 0px;
+    width: 45px;
+    height: 31px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.todolist li .checkbox:hover,.todolist li .remove:hover {
+    opacity: 0.8;
+}
