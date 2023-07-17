@@ -1,9 +1,13 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import TaskItem from "./TaskItem"
+import myContext from "../myContext"
 
-const TasksList = ({refresh, def}) => {
+
+const TasksList = () => {
   const [tasks, setTasks] = useState()
-  useEffect(() => {
+  const {refresh} = useContext(myContext)
+  
+  useEffect(() =>  {
     fetch('/api/v1/tasks', {
       headers:{
         "Authorization": `Bearer ${process.env.REACT_APP_API_KEY}`
@@ -11,11 +15,11 @@ const TasksList = ({refresh, def}) => {
     })
     .then(res => res.json())
     .then(data => setTasks(data.items))
-  },[def])
+  },[refresh])
 
   return (
     <ul  className='todolist'>
-      {tasks?.map((task) => <TaskItem key={task._uuid} task={task} refresh={refresh}/>)}
+      {tasks?.map((task) => <TaskItem key={task._uuid} task={task} />)}
     </ul>
   )
 }

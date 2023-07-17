@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import TasksForm from '../components/TaskForm'
 import TasksList from '../components/TaskList'
+import myContext from '../myContext'
 
 const Main = () => {
   const [refresh, setRefresh] = useState()
@@ -10,10 +11,10 @@ const Main = () => {
   }
 
   return (
-    <>
-        <TasksForm refresh={catchChange}/>
-        <TasksList refresh={catchChange} def={refresh}/>
-    </>
+    <myContext.Provider value={{refresh, catchChange}}>
+        <TasksForm />
+        <TasksList />
+    </myContext.Provider>
   )
 }
 

@@ -75,7 +75,7 @@ form button.active:hover {
 
 .remove {
     position: absolute;
-    right: 0px;
+    right: 20px;
     width: 45px;
     height: 31px;
     text-align: center;
@@ -98,6 +98,16 @@ form button.active:hover {
     cursor: pointer;
 }
 
-.todolist li .checkbox:hover,.todolist li .remove:hover {
+.todolist li .edit {
+    position: absolute;
+    right: 0px;
+    top:0;
+    width: 45px;
+    height: 31px;
+    text-align: center;
+    cursor: pointer;
+}
+
+ .checkbox:hover, .remove:hover, .edit {
     opacity: 0.8;
 }

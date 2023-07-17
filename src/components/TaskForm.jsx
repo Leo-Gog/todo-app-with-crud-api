@@ -1,17 +1,23 @@
-import { useRef } from 'react'
+import { useContext, useRef } from 'react'
+import myContext from '../myContext'
 
-const TasksForm = ({refresh}) => {
-    const inputRef = useRef(null)
+const TasksForm = () => {
+    const taskInputRef = useRef(null)
+    const userInputRef = useRef(null)
+    const dateInputRef = useRef(null)
+    const {catchChange} = useContext(myContext)
 
     const onSubmit = (e) => {
         e.preventDefault()
 
-        const inputValue = inputRef.current.value
+        const inputValue = taskInputRef.current.value
+        const userData = userInputRef?.current.value
+        const dateData = dateInputRef?.current.value
         const newTask = {
             name: inputValue,
             isCompleted: false,
-            // user: null,
-            // deadline: null,
+            person: userData,
+            deadline: dateData,
         }
 
         fetch('/api/v1/tasks', {
@@ -23,23 +29,28 @@ const TasksForm = ({refresh}) => {
             body: JSON.stringify([newTask])
         })
         // .then(response => console.log(response))
-        .catch(err => console.log(err))
+        .catch(err => console.error(err))
         .finally(()=>{
-            inputRef.current.value = '';
-            refresh(Date.now())
+            taskInputRef.current.value = ''
+            userInputRef.current.value = ''
+            dateInputRef.current.value = ''
+            catchChange(Date.now())
         })
         addButton.current.classList.remove("active")
     }
+    
     const addButton = useRef(null)
     const activeBtn = () => {
-        let userData = inputRef.current.value
+        let userData = taskInputRef.current.value
         if (userData.trim() !== '') addButton.current.classList.add("active")
         else addButton.current.classList.remove("active")
     }
 
     return (
-        <form onSubmit={(e)=>onSubmit(e)}>
-            <input type="text" ref={inputRef} onKeyUp={activeBtn} required/>
+        <form onSubmit={(e) => onSubmit(e)}>
+            <input type="text" placeholder='task' ref={taskInputRef} onKeyUp={activeBtn} required/>
+            <input type="text" placeholder='user' ref={userInputRef}/>
+            <input type="date" ref={dateInputRef}/>
             <button type='submit' className='btn' ref={addButton}>+</button>
         </form>
     )

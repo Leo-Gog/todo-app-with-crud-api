@@ -1,9 +1,15 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle, faCircle, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faCircle, faPenToSquare, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { useContext } from 'react';
+import myContext from '../myContext';
+import { Link } from 'react-router-dom';
+// import useCRUD from '../hooks/useCRUD';
 
-const TaskItem = ({task, refresh}) => {
-    const {_uuid, isCompleted, name} = task
-    const [id, status, value] = [_uuid, isCompleted, name]
+const TaskItem = ({task}) => {
+    const {_uuid:id, isCompleted, name:value} = task
+    const {catchChange} = useContext(myContext)
+    let status = isCompleted
+
     const onDelete = (id) => {
         fetch(`/api/v1/tasks/${id}`, {
             method: 'DELETE',
@@ -13,20 +19,21 @@ const TaskItem = ({task, refresh}) => {
             },
         })
         // .then(res => console.log('onDelete:', res))
-        .finally(refresh(Date.now()))
+        .finally(catchChange(Date.now()))
     }
 
     const onComplete = (id) => {
+        status = !status
         fetch(`/api/v1/tasks/${id}`, {
             method: 'PUT',
             headers:{
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${process.env.REACT_APP_API_KEY}`
             },
-            body: JSON.stringify({isCompleted: !status})
+            body: JSON.stringify({isCompleted: !isCompleted})
         })
         // .then(res => console.log('onComplete:', res))
-        .finally(refresh(Date.now()))
+        .finally(catchChange(Date.now()))
     }
 
     return (
@@ -35,10 +42,12 @@ const TaskItem = ({task, refresh}) => {
                 <FontAwesomeIcon icon={status? faCheckCircle : faCircle} />
             </span>
                 {value}
-            <span className='remove' onClick={() => onDelete(id)}>
+            <span className='remove' title='Remove' onClick={() => onDelete(id)}>
                 <FontAwesomeIcon icon={faPlus} />
             </span>
-            {/* <button>Redact</button>*/}
+            <Link className='edit' title='Edit' to={`edit/${id}`}>
+                <FontAwesomeIcon icon={faPenToSquare} />
+            </Link>
         </li>
     )
 }
