@@ -3,37 +3,23 @@ import { faCheckCircle, faCircle, faPenToSquare, faPlus } from '@fortawesome/fre
 import { useContext } from 'react';
 import myContext from '../myContext';
 import { Link } from 'react-router-dom';
-// import useCRUD from '../hooks/useCRUD';
+import useCRUD from '../hooks/useCRUD';
 
 const TaskItem = ({task}) => {
     const {_uuid:id, isCompleted, name:value} = task
     const {catchChange} = useContext(myContext)
     let status = isCompleted
+    const { sendRequest } = useCRUD()
 
     const onDelete = (id) => {
-        fetch(`/api/v1/tasks/${id}`, {
-            method: 'DELETE',
-            headers:{
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${process.env.REACT_APP_API_KEY}`
-            },
-        })
-        // .then(res => console.log('onDelete:', res))
-        .finally(catchChange(Date.now()))
+        sendRequest(`/api/v1/tasks/${id}`, 'DELETE')
+            .finally(catchChange(Date.now()))
     }
 
     const onComplete = (id) => {
         status = !status
-        fetch(`/api/v1/tasks/${id}`, {
-            method: 'PUT',
-            headers:{
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${process.env.REACT_APP_API_KEY}`
-            },
-            body: JSON.stringify({isCompleted: !isCompleted})
-        })
-        // .then(res => console.log('onComplete:', res))
-        .finally(catchChange(Date.now()))
+        sendRequest(`/api/v1/tasks/${id}`, 'PUT', {isCompleted: !isCompleted})
+            .finally(catchChange(Date.now()))
     }
 
     return (

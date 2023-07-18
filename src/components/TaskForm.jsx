@@ -1,11 +1,13 @@
 import { useContext, useRef } from 'react'
 import myContext from '../myContext'
+import useCRUD from '../hooks/useCRUD'
 
 const TasksForm = () => {
     const taskInputRef = useRef(null)
     const userInputRef = useRef(null)
     const dateInputRef = useRef(null)
     const {catchChange} = useContext(myContext)
+    const { sendRequest } = useCRUD()
 
     const onSubmit = (e) => {
         e.preventDefault()
@@ -13,6 +15,7 @@ const TasksForm = () => {
         const inputValue = taskInputRef.current.value
         const userData = userInputRef?.current.value
         const dateData = dateInputRef?.current.value
+        
         const newTask = {
             name: inputValue,
             isCompleted: false,
@@ -20,16 +23,7 @@ const TasksForm = () => {
             deadline: dateData,
         }
 
-        fetch('/api/v1/tasks', {
-            method: 'POST',
-            headers:{
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${process.env.REACT_APP_API_KEY}`
-            },
-            body: JSON.stringify([newTask])
-        })
-        // .then(response => console.log(response))
-        .catch(err => console.error(err))
+        sendRequest('/api/v1/tasks', 'POST', [newTask])
         .finally(()=>{
             taskInputRef.current.value = ''
             userInputRef.current.value = ''
