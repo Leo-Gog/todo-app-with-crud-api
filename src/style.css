@@ -4,7 +4,7 @@ body {
   }
 #root{
     margin: 120px auto;
-    max-width: 400px;
+    max-width: 600px;
     width: 100%;
     background: rgba(128, 128, 128, 0.397);
     color: white;
@@ -62,7 +62,7 @@ form button.active:hover {
 .todolist li {
     list-style: none;
     height: 45px;
-    width: 310px;
+    width: 90%;
     left: -40px;
     line-height: 45px;
     position: relative;

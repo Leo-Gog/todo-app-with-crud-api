@@ -1,6 +1,7 @@
 import { useContext, useRef } from 'react'
-import myContext from '../myContext'
+import myContext from '../contexts/myContext'
 import useCRUD from '../hooks/useCRUD'
+import { texts, useLanguageContext } from '../contexts/LanguageContext'
 
 const TasksForm = () => {
     const taskInputRef = useRef(null)
@@ -8,6 +9,7 @@ const TasksForm = () => {
     const dateInputRef = useRef(null)
     const {catchChange} = useContext(myContext)
     const { sendRequest } = useCRUD()
+    const { lang } = useLanguageContext()
 
     const onSubmit = (e) => {
         e.preventDefault()
@@ -42,8 +44,8 @@ const TasksForm = () => {
 
     return (
         <form onSubmit={(e) => onSubmit(e)}>
-            <input type="text" placeholder='task' ref={taskInputRef} onKeyUp={activeBtn} required/>
-            <input type="text" placeholder='user' ref={userInputRef}/>
+            <input type="text" placeholder={texts[lang].taskPlaceholder} ref={taskInputRef} onKeyUp={activeBtn} required/>
+            <input type="text" placeholder={texts[lang].userPlaceholder} ref={userInputRef}/>
             <input type="date" ref={dateInputRef}/>
             <button type='submit' className='btn' ref={addButton}>+</button>
         </form>

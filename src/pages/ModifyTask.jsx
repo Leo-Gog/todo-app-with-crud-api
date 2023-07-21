@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import useCRUD from "../hooks/useCRUD"
+import { texts, useLanguageContext } from "../contexts/LanguageContext"
 
 const ModifyTask = () => {
     const { id } = useParams()
@@ -8,6 +9,7 @@ const ModifyTask = () => {
     const userInputRef = useRef(null)
     const dateInputRef = useRef(null)
     const { sendRequest } = useCRUD()
+    const { lang } = useLanguageContext()
 
     const navigate = useNavigate()
 
@@ -32,10 +34,10 @@ const ModifyTask = () => {
     }
     return (
         <form onSubmit={(e) => sendChangedData(e, id)}>
-            <input type="text" placeholder='task' ref={taskInputRef}/>
-            <input type="text" placeholder='user' ref={userInputRef}/>
+            <input type="text" placeholder={texts[lang].taskPlaceholder} ref={taskInputRef}/>
+            <input type="text" placeholder={texts[lang].userPlaceholder} ref={userInputRef}/>
             <input type="date" ref={dateInputRef}/>
-            <button>Edit</button>
+            <button>{texts[lang].edit}</button>
         </form>
     )
 }

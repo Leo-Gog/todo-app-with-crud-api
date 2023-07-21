@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react"
 import TaskItem from "./TaskItem"
-import myContext from "../myContext"
+import myContext from "../contexts/myContext"
 import useCRUD from "../hooks/useCRUD"
 
 

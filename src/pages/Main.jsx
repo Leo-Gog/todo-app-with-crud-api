@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import TasksForm from '../components/TaskForm'
 import TasksList from '../components/TaskList'
-import myContext from '../myContext'
+import myContext from '../contexts/myContext'
 
 const Main = () => {
   const [refresh, setRefresh] = useState()
