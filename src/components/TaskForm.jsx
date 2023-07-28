@@ -5,19 +5,26 @@ import { addTodo } from '../store/todo/todo.thunk'
 const TasksForm = () => {
     const { texts } = useSelector(state => state.language)
     const dispatch = useDispatch()
+
     const taskInputRef = useRef(null)
     const userInputRef = useRef(null)
     const dateInputRef = useRef(null)
-    
+    const addButton = useRef(null)
+
+    const activeBtn = () => {
+        if (taskInputRef.current.value.trim()) addButton.current.classList.add("active")
+        else addButton.current.classList.remove("active")
+    }
+
     const onSubmit = (e) => {
         e.preventDefault()
 
-        const inputValue = taskInputRef.current.value
+        const taskData = taskInputRef.current.value
         const userData = userInputRef?.current.value
         const dateData = dateInputRef?.current.value
         
         const newTask = {
-            name: inputValue,
+            name: taskData,
             isCompleted: false,
             person: userData,
             deadline: dateData,
@@ -30,19 +37,12 @@ const TasksForm = () => {
         addButton.current.classList.remove("active")
     }
     
-    const addButton = useRef(null)
-    const activeBtn = () => {
-        let userData = taskInputRef.current.value
-        if (userData.trim() !== '') addButton.current.classList.add("active")
-        else addButton.current.classList.remove("active")
-    }
-
     return (
         <form onSubmit={(e) => onSubmit(e)}>
-            <input type="text" placeholder={texts.taskPlaceholder} ref={taskInputRef} onKeyUp={activeBtn} required/>
-            <input type="text" placeholder={texts.userPlaceholder} ref={userInputRef}/>
+            <input placeholder={texts.taskPlaceholder} ref={taskInputRef} onKeyUp={activeBtn} required/>
+            <input placeholder={texts.userPlaceholder} ref={userInputRef}/>
             <input type="date" ref={dateInputRef}/>
-            <button type='submit' className='btn' ref={addButton}>+</button>
+            <button className='btn' ref={addButton}>+</button>
         </form>
     )
 }

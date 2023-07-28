@@ -11,11 +11,11 @@ const ModifyTask = () => {
     const userInputRef = useRef(null)
     const dateInputRef = useRef(null)
 
-    const { texts } = useSelector(state => state.language)
-    const [{name, person, deadline}] = useSelector(state => state.todo.todoList.filter(todo => todo._uuid === id))
+    const [texts, [{name, person, deadline}]] = useSelector((state) => [
+        state.language.texts,
+        state.todo.todoList.filter(todo => todo._uuid === id)
+    ])
     
-    
-
     useEffect(() => {
         taskInputRef.current.value = name
         userInputRef.current.value = person ?? ''

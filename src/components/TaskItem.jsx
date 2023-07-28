@@ -7,10 +7,12 @@ import { deleteTodo, modifyTodo } from '../store/todo/todo.thunk';
 const TaskItem = ({task}) => {
     const {_uuid: id, isCompleted: status, name: value} = task
     const dispatch = useDispatch()
-    const {texts} = useSelector(state => state.language)
-    const {theme} = useSelector(state => state.theme)
+    const [texts, theme] = useSelector((state) => [
+        state.language.texts,
+        state.theme.theme
+    ])
 
-    const liStyle = {
+    const liDarkStyle = {
         backgroundColor: 'black'
     }
 
@@ -23,7 +25,7 @@ const TaskItem = ({task}) => {
     }
 
     return (
-        <li className={status ? 'done': undefined} style={theme === 'dark' ? liStyle : undefined}>
+        <li className={status ? 'done': undefined} style={theme === 'dark' ? liDarkStyle : undefined}>
             <span className='checkbox' onClick={() => onComplete(id)}>
                 <FontAwesomeIcon icon={status? faCheckCircle : faCircle} />
             </span>

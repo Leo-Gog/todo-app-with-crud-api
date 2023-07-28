@@ -6,46 +6,30 @@ import light from '../assets/light.svg'
 import { useDispatch, useSelector } from 'react-redux'
 import { toggleLanguage } from '../store/language/language.slice'
 import { toggleTheme } from '../store/theme/theme.slice'
-import { createGlobalStyle } from 'styled-components'
+import { GlobalDarkStyles, StyledToggleBtn, StyledToggleBtnImg } from '../styled/myStyledComponents'
 
 
 function Header() {
   const dispatch = useDispatch()
-  const {_lang: lang} = useSelector(state => state.language.texts)
-  const {theme} = useSelector(state => state.theme)
+  const [lang, theme] = useSelector((state) => [
+      state.language.texts._lang,
+      state.theme.theme
+    ])
 
-  const GlobalDarkStyles = createGlobalStyle`
-    body {
-      background-color: black;
-    }
-    #root {
-      background-color: rgb(0 0 0 40%);
-    }
-  `
-  
   const changeLang = () => dispatch(toggleLanguage())
   const changeTheme = () =>  dispatch(toggleTheme())
-
-  const btnStyle = {
-    backgroundColor: 'rgba(0, 0, 0, 0)', 
-    border: 'none'
-  }
-  const imgStyle = {
-    height: '20px'
-  }
 
   return (
     <>
       {theme === 'dark' ? <GlobalDarkStyles /> : undefined}
       <header>
-        <button onClick={changeLang} style={btnStyle}>
-          <img style={imgStyle} src={lang === 'ka'? ukFlag : geFlag} alt="toggle lang" />
-        </button>
-        <button onClick={changeTheme} style={btnStyle}>
-          <img src={theme === 'light' ? dark : light} alt="toggle theme" style={imgStyle}/>
-        </button>
+        <StyledToggleBtn onClick={changeLang} >
+          <StyledToggleBtnImg src={lang === 'ka'? ukFlag : geFlag} alt="toggle lang" />
+        </StyledToggleBtn>
+        <StyledToggleBtn onClick={changeTheme} >
+          <StyledToggleBtnImg src={theme === 'light' ? dark : light} alt="toggle theme" />
+        </StyledToggleBtn>    
       </header>
-      
       <Outlet/>
     </>
   )

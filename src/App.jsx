@@ -8,8 +8,8 @@ function App() {
     <>
       <Routes>
         <Route path='/' element={<Header/>} >
-          <Route index element={<Main />}/>
-          <Route path='edit/:id' element={<ModifyTask />}/>
+          <Route index element={<Main/>}/>
+          <Route path='edit/:id' element={<ModifyTask/>}/>
         </Route>
       </Routes>
     </>
