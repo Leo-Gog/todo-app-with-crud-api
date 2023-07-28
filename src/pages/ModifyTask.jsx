@@ -1,43 +1,44 @@
 import { useEffect, useRef } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import useCRUD from "../hooks/useCRUD"
-import { texts, useLanguageContext } from "../contexts/LanguageContext"
+import { useDispatch, useSelector } from 'react-redux'
+import { modifyTodo } from "../store/todo/todo.thunk"
 
 const ModifyTask = () => {
     const { id } = useParams()
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
     const taskInputRef = useRef(null)
     const userInputRef = useRef(null)
     const dateInputRef = useRef(null)
-    const { sendRequest } = useCRUD()
-    const { lang } = useLanguageContext()
 
-    const navigate = useNavigate()
+    const { texts } = useSelector(state => state.language)
+    const [{name, person, deadline}] = useSelector(state => state.todo.todoList.filter(todo => todo._uuid === id))
+    
+    
 
     useEffect(() => {
-        sendRequest(`/api/v1/tasks/${id}`, 'GET')
-            .then(data => {
-                const {name, person, deadline} = data
-                taskInputRef.current.value = name
-                userInputRef.current.value = person ?? ''
-                dateInputRef.current.value = deadline ?? ''
-            })
-    }, [id, sendRequest])
+        taskInputRef.current.value = name
+        userInputRef.current.value = person ?? ''
+        dateInputRef.current.value = deadline ?? ''
+    }, [])
 
     const sendChangedData = (e, id) => {
         e.preventDefault()
-        sendRequest(`/api/v1/tasks/${id}`, 'PUT', {
+        dispatch(modifyTodo({
+            _uuid: id,
             name: taskInputRef.current.value ?? '',
             person: userInputRef.current.value ?? '',
             deadline: dateInputRef.current.value ?? '',
-        })
-          .finally(navigate('/'))
+        }))
+        navigate('/')
     }
+    
     return (
         <form onSubmit={(e) => sendChangedData(e, id)}>
-            <input type="text" placeholder={texts[lang].taskPlaceholder} ref={taskInputRef}/>
-            <input type="text" placeholder={texts[lang].userPlaceholder} ref={userInputRef}/>
+            <input type="text" placeholder={texts.taskPlaceholder} ref={taskInputRef}/>
+            <input type="text" placeholder={texts.userPlaceholder} ref={userInputRef}/>
             <input type="date" ref={dateInputRef}/>
-            <button>{texts[lang].edit}</button>
+            <button>{texts.edit}</button>
         </form>
     )
 }

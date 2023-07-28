@@ -1,16 +1,14 @@
-import { useContext, useRef } from 'react'
-import myContext from '../contexts/myContext'
-import useCRUD from '../hooks/useCRUD'
-import { texts, useLanguageContext } from '../contexts/LanguageContext'
+import { useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { addTodo } from '../store/todo/todo.thunk'
 
 const TasksForm = () => {
+    const { texts } = useSelector(state => state.language)
+    const dispatch = useDispatch()
     const taskInputRef = useRef(null)
     const userInputRef = useRef(null)
     const dateInputRef = useRef(null)
-    const {catchChange} = useContext(myContext)
-    const { sendRequest } = useCRUD()
-    const { lang } = useLanguageContext()
-
+    
     const onSubmit = (e) => {
         e.preventDefault()
 
@@ -24,14 +22,11 @@ const TasksForm = () => {
             person: userData,
             deadline: dateData,
         }
+        dispatch(addTodo([newTask]))
 
-        sendRequest('/api/v1/tasks', 'POST', [newTask])
-        .finally(()=>{
-            taskInputRef.current.value = ''
-            userInputRef.current.value = ''
-            dateInputRef.current.value = ''
-            catchChange(Date.now())
-        })
+        taskInputRef.current.value = ''
+        userInputRef.current.value = ''
+        dateInputRef.current.value = ''
         addButton.current.classList.remove("active")
     }
     
@@ -44,8 +39,8 @@ const TasksForm = () => {
 
     return (
         <form onSubmit={(e) => onSubmit(e)}>
-            <input type="text" placeholder={texts[lang].taskPlaceholder} ref={taskInputRef} onKeyUp={activeBtn} required/>
-            <input type="text" placeholder={texts[lang].userPlaceholder} ref={userInputRef}/>
+            <input type="text" placeholder={texts.taskPlaceholder} ref={taskInputRef} onKeyUp={activeBtn} required/>
+            <input type="text" placeholder={texts.userPlaceholder} ref={userInputRef}/>
             <input type="date" ref={dateInputRef}/>
             <button type='submit' className='btn' ref={addButton}>+</button>
         </form>

@@ -1,22 +1,23 @@
-import { useContext, useEffect, useState } from "react"
+import { useEffect } from "react"
 import TaskItem from "./TaskItem"
-import myContext from "../contexts/myContext"
-import useCRUD from "../hooks/useCRUD"
+import { useDispatch, useSelector } from 'react-redux'
+import { getTodos } from "../store/todo/todo.thunk"
 
 
 const TasksList = () => {
-  const [tasks, setTasks] = useState()
-  const {refresh} = useContext(myContext)
-  const { sendRequest } = useCRUD()
+  const dispatch = useDispatch()
+  const {todoList, loading, error} = useSelector(state => state.todo)
   
-  useEffect(() =>  {
-    sendRequest('/api/v1/tasks', 'GET')
-      .then(data => setTasks(data.items))
-  },[refresh, sendRequest])
+  useEffect(() => {
+    dispatch(getTodos())
+  }, [dispatch])
+
+  if (loading) return <p>loading...</p>;
+  if (error) return <p>error...</p>;
 
   return (
     <ul  className='todolist'>
-      {tasks?.map((task) => <TaskItem key={task._uuid} task={task} />)}
+      {todoList?.map((task) => <TaskItem key={task._uuid} task={task} />)}
     </ul>
   )
 }
