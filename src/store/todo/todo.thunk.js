@@ -1,4 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { catchError } from "../error/error.slice";
+import { toggleLoading } from "../loading/loading.slice";
 
 const sendRequest = async (url, method, body) => {
 
@@ -18,43 +20,51 @@ const sendRequest = async (url, method, body) => {
         const data = await response.json();
         return data;
     } catch (err) {
-        console.error(err.message);
+        throw new Error (err.message)
     }
 };
 
-export const getTodos = createAsyncThunk("/tasks/GET", async (_, ThunkAPI) => {
+export const getTodos = createAsyncThunk("/tasks/GET", async (_, {dispatch, fulfillWithValue}) => {
     try {
+        dispatch(toggleLoading())
         const data = await sendRequest("/api/v1/tasks", 'GET')
-        if (data) return ThunkAPI.fulfillWithValue(data.items);
+        dispatch(toggleLoading())
+        if (data) return fulfillWithValue(data.items);
+        
     } catch (error) {
-        return ThunkAPI.rejectWithValue("Something went wrong");
+        dispatch(catchError(error))
     }
 });
 
-export const deleteTodo = createAsyncThunk("/tasks/DELETE", async (id, ThunkAPI) => {
+export const deleteTodo = createAsyncThunk("/tasks/DELETE", async (id, {dispatch, fulfillWithValue}) => {
     try {
+        dispatch(toggleLoading())
         const data = await sendRequest(`/api/v1/tasks/${id}`, 'DELETE')
-        if (data) return ThunkAPI.fulfillWithValue(data._uuid);
+        dispatch(toggleLoading())
+        if (data) return fulfillWithValue(data._uuid);
       } catch (error) {
-        return ThunkAPI.rejectWithValue("Something went wrong");
+        dispatch(catchError(error))
       }
 })
 
-export const modifyTodo = createAsyncThunk("/tasks/PUT",  async (payload, ThunkAPI) => {
+export const modifyTodo = createAsyncThunk("/tasks/PUT",  async (payload, {dispatch, fulfillWithValue}) => {
     try {
+        dispatch(toggleLoading())
         const data = await sendRequest(`/api/v1/tasks/${payload._uuid}`, 'PUT', payload)
-        if (data) return ThunkAPI.fulfillWithValue(payload);
+        dispatch(toggleLoading())
+        if (data) return fulfillWithValue(payload);
     } catch (error) {
-        return ThunkAPI.rejectWithValue("Something went wrong");
+        dispatch(catchError(error))
     }
 })
 
-export const addTodo = createAsyncThunk("/tasks/POST",  async (payload, ThunkAPI) => {
+export const addTodo = createAsyncThunk("/tasks/POST",  async (payload, {dispatch, fulfillWithValue}) => {
     try {
+        dispatch(toggleLoading())
         const data = await sendRequest(`/api/v1/tasks`, 'POST', payload)
-        console.log(data)
-        if (data) return ThunkAPI.fulfillWithValue(data.items[0]);
+        dispatch(toggleLoading())
+        if (data) return fulfillWithValue(data.items[0]);
     } catch (error) {
-        return ThunkAPI.rejectWithValue("Something went wrong");
+        dispatch(catchError(error))
     }
 })
