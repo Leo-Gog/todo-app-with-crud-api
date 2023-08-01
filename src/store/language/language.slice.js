@@ -17,19 +17,20 @@ const texts = {
     },
 };
 
-const initialState = {
-    texts: texts['en']
-};
+const defaultLanguage = localStorage.getItem('language') ?? 'en'
 
 const languageSlice = createSlice({
     name: "language",
-    initialState,
+    initialState:{
+        texts: texts[defaultLanguage]
+    },
     reducers: {
         toggleLanguage(state) {
             state.texts = (
                 state.texts._lang === 'en' ? 
                 texts['ka']  : texts['en'] 
             )
+            localStorage.setItem('language', state.texts._lang)
         }
     },
 })
