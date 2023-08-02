@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { useDispatch, useSelector } from 'react-redux'
 import { modifyTodo } from "../store/todo/todo.thunk"
+// import { modifyTaskSelector } from "../store/selectors"
 
 const ModifyTask = () => {
     const { id } = useParams()
@@ -14,7 +15,7 @@ const ModifyTask = () => {
     const [texts, [{name, person, deadline}]] = useSelector((state) => [
         state.language.texts,
         state.todo.todoList.filter(todo => todo._uuid === id)
-    ])
+    ])     
     
     useEffect(() => {
         taskInputRef.current.value = name

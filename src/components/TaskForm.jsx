@@ -1,9 +1,10 @@
 import { useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addTodo } from '../store/todo/todo.thunk'
+import { taskFormReselector } from '../store/selectors'
 
 const TasksForm = () => {
-    const { texts } = useSelector(state => state.language)
+    const { texts } = useSelector(taskFormReselector)
     const dispatch = useDispatch()
 
     const taskInputRef = useRef(null)

@@ -3,14 +3,12 @@ import { faCheckCircle, faCircle, faPenToSquare, faPlus } from '@fortawesome/fre
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteTodo, modifyTodo } from '../store/todo/todo.thunk';
+import { taskItemtReselector } from '../store/selectors';
 
 const TaskItem = ({task}) => {
     const {_uuid: id, isCompleted: status, name: value} = task
     const dispatch = useDispatch()
-    const [texts, theme] = useSelector((state) => [
-        state.language.texts,
-        state.theme.theme
-    ])
+    const [texts, theme] = useSelector(taskItemtReselector)
 
     const liDarkStyle = {
         backgroundColor: 'black'

@@ -8,19 +8,22 @@ const todoSlice = createSlice({
   name: "todo",
   initialState,
   reducers: {},
-  extraReducers: {
-    [getTodos.fulfilled.type]: (state, action) => {
+  extraReducers: (builder) => {
+    builder
+      .addCase(getTodos.fulfilled, (state, action) => {
         state.todoList = action.payload;
-    },
-    [deleteTodo.fulfilled.type]: (state, action) => {
+      })
+      .addCase(deleteTodo.fulfilled, (state, action) => {
         state.todoList = state.todoList.filter((todo) => todo._uuid !== action.payload)
-    },
-    [modifyTodo.fulfilled.type]: (state, action) => {
-        state.todoList = state.todoList.map((todo)=> todo._uuid === action.payload._uuid ?  {...todo, ...action.payload} : todo)
-    },
-    [addTodo.fulfilled.type]: (state, action) => {
+      })
+      .addCase(modifyTodo.fulfilled, (state, action) => {
+        state.todoList = state.todoList.map((todo) =>
+          todo._uuid === action.payload._uuid ? {...todo, ...action.payload} : todo
+        )
+      })
+      .addCase(addTodo.fulfilled, (state, action) => {
         state.todoList.unshift(action.payload)
-    },
+      })
   },
 });
 

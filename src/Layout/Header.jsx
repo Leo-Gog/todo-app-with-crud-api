@@ -7,14 +7,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { toggleLanguage } from '../store/language/language.slice'
 import { toggleTheme } from '../store/theme/theme.slice'
 import { GlobalDarkStyles, StyledToggleBtn, StyledToggleBtnImg } from '../styled/myStyledComponents'
+import { headerReselector } from '../store/selectors'
 
 
 function Header() {
   const dispatch = useDispatch()
-  const [lang, theme] = useSelector((state) => [
-      state.language.texts._lang,
-      state.theme.theme
-    ])
+  const [lang, theme] = useSelector(headerReselector)
 
   const changeLang = () => dispatch(toggleLanguage())
   const changeTheme = () =>  dispatch(toggleTheme())

@@ -2,15 +2,11 @@ import { useEffect } from "react"
 import TaskItem from "./TaskItem"
 import { useDispatch, useSelector } from 'react-redux'
 import { getTodos } from "../store/todo/todo.thunk"
-
+import { taskListReselector } from "../store/selectors"
 
 const TasksList = () => {
   const dispatch = useDispatch()
-  const [todoList, error, loading] = useSelector(state => [
-    state.todo.todoList,
-    state.error.error,
-    state.loading.loading
-  ])
+  const [todoList, error, loading] = useSelector(taskListReselector)
 
   useEffect(() => {
     dispatch(getTodos())
