@@ -1,6 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { addTodo, deleteTodo, getTodos, modifyTodo } from "./todo.thunk";
-const initialState = {
+import { TaskInterface } from "../../types/interfaces";
+
+export interface TodoState {
+  todoList: TaskInterface[]
+}
+
+const initialState: TodoState = {
   todoList: [],
 };
 

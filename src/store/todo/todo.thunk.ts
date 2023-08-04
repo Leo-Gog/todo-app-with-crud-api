@@ -1,10 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { catchError } from "../error/error.slice";
 import { toggleLoading } from "../loading/loading.slice";
+import { NewTodoInterface, OptionsBody, OptionsInterface, TaskInterface } from "../../types/interfaces";
+import { TodoState } from "./todo.slice";
+import { AppDispatch } from "..";
 
-const sendRequest = async (url, method, body) => {
+const sendRequest = async (url: string, method: string, body?:any) => {
 
-    const options = {
+    const options:OptionsInterface = {
         method,
         headers: {
         "Content-Type": "application/json",
@@ -20,11 +23,11 @@ const sendRequest = async (url, method, body) => {
         const data = await response.json();
         return data;
     } catch (err) {
-        throw new Error (err.message)
+        throw err
     }
 };
 
-export const getTodos = createAsyncThunk("/tasks/GET", async (_, {dispatch, fulfillWithValue}) => {
+export const getTodos = createAsyncThunk<TaskInterface[]>("/tasks/GET", async (_, {dispatch, fulfillWithValue}) => {
     try {
         dispatch(toggleLoading())
         const data = await sendRequest("/api/v1/tasks", 'GET')
@@ -36,7 +39,7 @@ export const getTodos = createAsyncThunk("/tasks/GET", async (_, {dispatch, fulf
     }
 });
 
-export const deleteTodo = createAsyncThunk("/tasks/DELETE", async (id, {dispatch, fulfillWithValue}) => {
+export const deleteTodo = createAsyncThunk<string, string>("/tasks/DELETE", async (id, {dispatch, fulfillWithValue}) => {
     try {
         dispatch(toggleLoading())
         const data = await sendRequest(`/api/v1/tasks/${id}`, 'DELETE')
@@ -47,18 +50,18 @@ export const deleteTodo = createAsyncThunk("/tasks/DELETE", async (id, {dispatch
       }
 })
 
-export const modifyTodo = createAsyncThunk("/tasks/PUT",  async (payload, {dispatch, fulfillWithValue}) => {
+export const modifyTodo = createAsyncThunk<TaskInterface, OptionsBody>("/tasks/PUT",  async (payload, {dispatch, fulfillWithValue}) => {
     try {
         dispatch(toggleLoading())
         const data = await sendRequest(`/api/v1/tasks/${payload._uuid}`, 'PUT', payload)
         dispatch(toggleLoading())
-        if (data) return fulfillWithValue(payload);
+        if (data) return fulfillWithValue(data);
     } catch (error) {
         dispatch(catchError(error))
     }
 })
 
-export const addTodo = createAsyncThunk("/tasks/POST",  async (payload, {dispatch, fulfillWithValue}) => {
+export const addTodo = createAsyncThunk<TaskInterface, NewTodoInterface[]>("/tasks/POST",  async (payload, {dispatch, fulfillWithValue}) => {
     try {
         dispatch(toggleLoading())
         const data = await sendRequest(`/api/v1/tasks`, 'POST', payload)

@@ -1,21 +1,28 @@
+import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faCircle, faPenToSquare, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux'
 import { deleteTodo, modifyTodo } from '../store/todo/todo.thunk';
-import { taskItemtReselector } from '../store/selectors';
+import { getSelectedLanguage, getSelectedTheme } from '../store/selectors';
+import { useAppDispatch, useAppSelector } from '../hooks/hooks';
+import { TaskInterface } from '../types/interfaces';
+interface TaskItemprops {
+    task: TaskInterface
+}
 
-const TaskItem = ({task}) => {
+const TaskItem: React.FC<TaskItemprops> = ({task}) => {
     const {_uuid: id, isCompleted: status, name: value} = task
-    const dispatch = useDispatch()
-    const [texts, theme] = useSelector(taskItemtReselector)
+    const dispatch = useAppDispatch()
+
+    const texts = useAppSelector(getSelectedLanguage)
+    const theme = useAppSelector(getSelectedTheme)
 
     const liDarkStyle = {
         backgroundColor: 'black'
     }
 
-    const onDelete = (id) => dispatch(deleteTodo(id))
-    const onComplete = (id) => {
+    const onDelete = (id: string) => dispatch(deleteTodo(id))
+    const onComplete = (id: string) => {
         dispatch(modifyTodo({
             _uuid: id,
             isCompleted: !status

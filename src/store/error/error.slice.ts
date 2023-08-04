@@ -1,6 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+interface errorState {
+    error: Error | string | null
+}
+
+const initialState: errorState = {
     error: null
 };
 
