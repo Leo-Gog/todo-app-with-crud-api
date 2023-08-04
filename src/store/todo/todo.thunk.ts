@@ -2,8 +2,6 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { catchError } from "../error/error.slice";
 import { toggleLoading } from "../loading/loading.slice";
 import { NewTodoInterface, OptionsBody, OptionsInterface, TaskInterface } from "../../types/interfaces";
-import { TodoState } from "./todo.slice";
-import { AppDispatch } from "..";
 
 const sendRequest = async (url: string, method: string, body?:any) => {
 
@@ -33,7 +31,6 @@ export const getTodos = createAsyncThunk<TaskInterface[]>("/tasks/GET", async (_
         const data = await sendRequest("/api/v1/tasks", 'GET')
         dispatch(toggleLoading())
         if (data) return fulfillWithValue(data.items);
-        
     } catch (error) {
         dispatch(catchError(error))
     }

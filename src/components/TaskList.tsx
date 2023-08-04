@@ -13,7 +13,7 @@ const TasksList: React.FC = () => {
 
   useEffect(() => {
     dispatch(getTodos())
-  }, [])
+  }, [dispatch])
 
   return (
     <>

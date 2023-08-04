@@ -21,8 +21,7 @@ const ModifyTask: React.FC = () => {
         taskInputRef.current!.value = name ?? ''
         userInputRef.current!.value  = person ?? '';
         dateInputRef.current!.value  = deadline ?? '';
-    }, [])
-
+    }, [name, person, deadline])
     
     const sendChangedData = (e: React.FocusEvent<HTMLFormElement>, id: string | undefined) => {
         e.preventDefault()
